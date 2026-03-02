@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+/* ──────────────────────────────────────────────────────────────
+   V3 — Dark Glassmorphism Design System
+   Inspired by Elite Cuts / Apple Dark Mode aesthetic
+   
+   Philosophy:
+   • Dark ambient environment with floating glass panels
+   • Subtle noise texture for depth
+   • Rounded-full nav + buttons, rounded-3xl cards
+   • Inter font, semibold headings, muted secondary text
+   • Center-aligned sections with blue accent labels
+   • Generous spacing between sections
+   ────────────────────────────────────────────────────────────── */
+
+/* ── Light Mode (default) ── */
+:root {
+  --bg-primary: #FAFAFA;
+  --bg-secondary: #FFFFFF;
+  --text-primary: #1A1A1A;
+  --text-secondary: #555555;
+  --accent-blue: #0A84FF;
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-surface: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Dark Mode ── */
+.dark {
+  --bg-primary: #000000;
+  --bg-secondary: #1c1c1e;
+  --text-primary: #F5F5F7;
+  --text-secondary: #A1A1A6;
+  --accent-blue: #0A84FF;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-surface: rgba(30, 30, 30, 0.4);
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-surface: var(--bg-secondary);
+  --color-foreground: var(--text-primary);
+  --color-muted: var(--text-secondary);
+  --font-sans: var(--font-inter);
+}
+
+/* ── Core Setup ── */
+html {
+  background: var(--bg-primary);
+  overflow-x: hidden;
+  transition: background 0.3s ease;
+  /* Safe area for notch devices */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+}
+
+body {
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  /* Base font 18px for 45+ readability */
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+/* ── View Transition ── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ── Focus Visible ── */
+*:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ambient-orb {
+    animation: none !important;
+    opacity: 0.1 !important;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+/* ── Ambient Gradient Background ── */
+.ambient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 50%, #f0f0f0 0%, #fafafa 100%);
+  overflow: hidden;
+  pointer-events: none;
+  transition: background 0.5s ease;
+}
+
+.dark .ambient-bg {
+  background: radial-gradient(circle at 50% 50%, #151515 0%, #000000 100%);
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+  animation: float 60s infinite ease-in-out;
+  transition: background 0.5s ease, opacity 0.5s ease;
+}
+
+.orb-1 {
+  width: 800px;
+  height: 800px;
+  background: #d4d4d8;
+  top: -200px;
+  left: -200px;
+  animation-duration: 60s;
+}
+
+.orb-2 {
+  width: 700px;
+  height: 700px;
+  background: #c4c4cc;
+  bottom: -200px;
+  right: -200px;
+  animation-duration: 45s;
+  animation-delay: -10s;
+}
+
+.orb-3 {
+  width: 500px;
+  height: 500px;
+  background: #d0d0d6;
+  top: 30%;
+  left: 40%;
+  animation-duration: 70s;
+  animation-delay: -30s;
+}
+
+/* Mobile: smaller orbs to avoid GPU waste */
+@media (max-width: 768px) {
+  .orb-1 { width: 400px; height: 400px; }
+  .orb-2 { width: 350px; height: 350px; }
+  .orb-3 { width: 250px; height: 250px; }
+}
+
+.dark .ambient-orb { opacity: 0.3; }
+.dark .orb-1 { background: #252529; }
+.dark .orb-2 { background: #1c1c1e; }
+.dark .orb-3 { background: #202022; }
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(50px, -30px) scale(1.05); }
+  66% { transform: translate(-30px, 40px) scale(0.95); }
+}
+
+/* ── Noise Texture ── */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.015;
+  transition: opacity 0.3s ease;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.dark .noise-overlay {
+  opacity: 0.025;
+}
+
+/* ── Glass Utilities ── */
+.glass-panel {
+  background: var(--glass-surface);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.06);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .glass-panel {
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile: reduce blur for GPU perf */
+@media (max-width: 768px) {
+  .glass-panel {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+}
+
+.glass-pill {
+  background: rgba(200, 200, 200, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.dark .glass-pill {
+  background: rgba(40, 40, 40, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Container ── */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ── Text Selection ── */
+::selection {
+  background: rgba(10, 132, 255, 0.2);
+  color: var(--text-primary);
+}
+
+.dark ::selection {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

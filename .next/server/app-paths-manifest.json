@@ -1,0 +1,11 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/conditions/page": "app/conditions/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/doctors/[slug]/page": "app/doctors/[slug]/page.js",
+  "/doctors/page": "app/doctors/page.js",
+  "/faqs/page": "app/faqs/page.js",
+  "/page": "app/page.js",
+  "/patient-info/page": "app/patient-info/page.js"
+}
