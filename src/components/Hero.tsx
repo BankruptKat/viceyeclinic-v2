@@ -6,8 +6,8 @@ import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[80vh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden pt-20">
-      <div className="container relative z-10 flex flex-col items-center text-center px-4">
+    <section className="relative h-dvh flex flex-col items-center justify-center overflow-hidden">
+      <div className="container relative z-10 flex flex-col items-center text-center px-4 pt-16 md:pt-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
